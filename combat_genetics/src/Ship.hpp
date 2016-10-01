@@ -47,6 +47,9 @@ public:
     
     void setGameInfo( vector<Ship*> * ships );
     
+    string fullName();
+    string createName();
+    
     void kill();
     
     //basic shit
@@ -80,6 +83,8 @@ public:
     int generations;
     int totalKills;
     int totalDeaths;
+    
+    string name[3];
     
     
     //player control for debug

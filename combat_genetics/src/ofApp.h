@@ -37,10 +37,12 @@ public:
     void gotMessage(ofMessage msg);
     
     ofxControlPanel panel;
+    bool hidePanel;
     bool paused;
     
     int numShips;
     vector<Ship *> shipsWaiting, shipsDone;
+    vector<Ship *> shipsSorted;
     
     float mutationCurve; //high values will push the rand number closer to 0. Lower prc values mean more mutaitons!
     

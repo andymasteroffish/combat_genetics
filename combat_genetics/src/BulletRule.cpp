@@ -17,7 +17,7 @@ BulletRule::BulletRule(){
     usingMaxDist = ofRandomuf() > 0.5;
     usingMinDist = ofRandomuf() > 0.5;
     usingAngle = ofRandomuf() > 0.5;
-    usingGettingCloser = ofRandomf() > 0.5;
+    usingGettingCloser = ofRandomuf() > 0.5;
     
     
     minDist = ofRandom(0, ARENA_W);

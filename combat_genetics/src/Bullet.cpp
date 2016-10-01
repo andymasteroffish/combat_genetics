@@ -24,6 +24,7 @@ void Bullet::update(){
 }
 
 void Bullet::draw(){
+    ofNoFill();
     ofSetColor(255);
     ofDrawCircle(pos.x, pos.y, size);
 }

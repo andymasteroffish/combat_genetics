@@ -14,11 +14,12 @@ void ofApp::setup(){
     numShipsPerGame = 8;
     
     //prepare panel
+    hidePanel = false;
     panel.setup("settings", ofGetWidth()-280, 0, 270, 400);
     panel.addPanel("settings");
     panel.setWhichPanel(0);
-    panel.addSliderInt("ticks_per_frame", 1, 1, 100);
-    panel.addSliderInt("max_ticks_per_game", 10000, 500, 100000);
+    panel.addSliderInt("ticks_per_frame", 40, 1, 200);
+    panel.addSliderInt("max_ticks_per_game", 7000, 500, 50000);
     
     panel.addSlider("mutation_rate", 1, 0.2, 5);
                 
@@ -34,8 +35,10 @@ void ofApp::setup(){
     
     //start with random ships
     shipsWaiting.resize(numShips);
+    shipsSorted.resize(numShips);
     for (int i=0; i<shipsWaiting.size(); i++){
         shipsWaiting[i] = new Ship();
+        shipsSorted[i] = shipsWaiting[i];
     }
     //shipsWaiting[0]->usePlayerControl = true;   //testing
     
@@ -48,7 +51,7 @@ void ofApp::setup(){
 void ofApp::startNextGame(){
     
     gameCount ++;
-    cout<<"start game "<<gameCount<<endl;
+    //cout<<"start game "<<gameCount<<endl;
     
     if (game != NULL){
         delete game;
@@ -71,11 +74,11 @@ void ofApp::startNextGame(){
 //--------------------------------------------------------------
 void ofApp::endGame(){
     
-    cout<<"end game"<<endl;
+    //cout<<"end game"<<endl;
     //give everybody their score and move them to the done list
     for (int i=0; i<game->ships.size(); i++){
         game->ships[i]->score = game->ships[i]->numKills * game->ships[i]->winnerBonus;
-        cout<<"ship "<<i<<" kills: "<<game->ships[i]->numKills<<"  bonus: "<<game->ships[i]->winnerBonus<<" score: "<<game->ships[i]->score<<endl;
+        //cout<<"ship "<<i<<" kills: "<<game->ships[i]->numKills<<"  bonus: "<<game->ships[i]->winnerBonus<<" score: "<<game->ships[i]->score<<endl;
         
         
         //age them
@@ -105,10 +108,6 @@ void ofApp::startNextGeneration(){
     
     //first sort this generation
     ofSort(shipsDone, ofApp::shipSort);
-    
-//    for (int i=0; i<shipsDone.size(); i++){
-//        cout<<i<<(i<10 ? " ":"")<<" - kills: "<<shipsDone[i]->numKills<<"  bonus: "<<shipsDone[i]->winnerBonus<<" score: "<<shipsDone[i]->score<<endl;
-//    }
     
     shipsWaiting.clear();
     
@@ -142,10 +141,18 @@ void ofApp::startNextGeneration(){
     }
     shipsDone.clear();
     
+    //run through and make the sorted vector match
+    for (int i=0; i<numShips; i++){
+        shipsSorted[i] = shipsWaiting[i];
+    }
+    //but sorted
+    ofSort(shipsSorted, ofApp::shipSort);
+    
     //show what we've got
     cout<<endl<<"new ship list:"<<endl;
-    for (int i=0; i<shipsWaiting.size(); i++){
-        cout<<i<<(i<10?" ":"")<<" - age: "<<shipsWaiting[i]->age<< "  gen: "<<shipsWaiting[i]->generations<<"  score prev round: "<<shipsWaiting[i]->score<<"  total kills: "<<shipsWaiting[i]->totalKills<<"  total deaths: "<<shipsWaiting[i]->totalDeaths<<endl;
+    for (int i=0; i<shipsSorted.size(); i++){
+        cout<<i<<" - "<<shipsSorted[i]->fullName()<<endl;;
+        cout<<"age: "<<shipsSorted[i]->age<< "  gen: "<<shipsSorted[i]->generations<<"  score prev round: "<<shipsSorted[i]->score<<"  total kills: "<<shipsSorted[i]->totalKills<<"  total deaths: "<<shipsSorted[i]->totalDeaths<<endl;
     }
     
     //shuffle that shit
@@ -196,7 +203,9 @@ void ofApp::draw(){
     ofSetColor(255);
     ofDrawBitmapString("gen: "+ofToString(generationCount)+"  game: "+ofToString(gameCount), 10, 35);
     
-    panel.draw();
+    if (!hidePanel){
+        panel.draw();
+    }
 }
 
 //--------------------------------------------------------------
@@ -204,6 +213,9 @@ void ofApp::keyPressed(int key){
     game->keyPressed(key);
     if (key == ' '){
         paused = !paused;
+    }
+    if (key == 'p'){
+        hidePanel = !hidePanel;
     }
 }
 
@@ -214,22 +226,30 @@ void ofApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y ){
-    panel.mouseMoved(x, y);
+    if (!hidePanel){
+        panel.mouseMoved(x, y);
+    }
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseDragged(int x, int y, int button){
-    panel.mouseDragged(x, y, button);
+    if (!hidePanel){
+        panel.mouseDragged(x, y, button);
+    }
 }
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
-    panel.mousePressed(x, y, button);
+    if (!hidePanel){
+        panel.mousePressed(x, y, button);
+    }
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button){
-    panel.mouseReleased(x, y, button);
+    if (!hidePanel){
+        panel.mouseReleased(x, y, button);
+    }
 }
 
 //--------------------------------------------------------------

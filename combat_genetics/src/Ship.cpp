@@ -30,12 +30,16 @@ Ship::Ship(){
     usePlayerControl = false;
     holdingThurst = holdingReverse = holdingLeft = holdingRight = holdingFire = false;
     
+    name[0] = createName();
+    name[1] = createName();
+    name[2] = createName();
+    
     //display the rules
-    cout<<"RULES"<<endl;
-    for (int i=0; i<rules.size(); i++){
-        cout<<i<<endl;
-        rules[i]->print();
-    }
+//    cout<<"RULES"<<endl;
+//    for (int i=0; i<rules.size(); i++){
+//        cout<<i<<endl;
+//        rules[i]->print();
+//    }
 }
 
 Ship::Ship(Ship * parent, float mutationCurve){
@@ -45,6 +49,10 @@ Ship::Ship(Ship * parent, float mutationCurve){
     reverseSpeed = parent->reverseSpeed;
     turnSpeed = parent->turnSpeed;
     size = parent->size;
+    
+    name[0] = createName();
+    name[1] = parent->name[0];
+    name[2] = parent->name[2];
     
     shootCoolDownTicks = parent->shootCoolDownTicks;
     
@@ -70,18 +78,18 @@ Ship::Ship(Ship * parent, float mutationCurve){
     }
     
     //display the rules
-    cout<<"RULES"<<endl;
-    for (int i=0; i<rules.size(); i++){
-        cout<<endl;
-        cout<<i<<" parent"<<endl;
-        parent->rules[i]->print();
-        cout<<i<<" me"<<endl;
-        rules[i]->print();
-    }
+//    cout<<"RULES"<<endl;
+//    for (int i=0; i<rules.size(); i++){
+//        cout<<endl;
+//        cout<<i<<" parent"<<endl;
+//        parent->rules[i]->print();
+//        cout<<i<<" me"<<endl;
+//        rules[i]->print();
+//    }
     
     
     //chance of removing a rule
-    if (powf(ofRandomuf(), mutationCurve) < 0.2 && rules.size() > 0){
+    if (powf(ofRandomuf(), mutationCurve) < 0.7 && rules.size() > 0){
         int randID = ofRandom(rules.size());
         //cout<<"kill rule "<<randID<<endl;
         //rules[randID]->print();
@@ -90,8 +98,8 @@ Ship::Ship(Ship * parent, float mutationCurve){
     }
     
     //chance of adding a rule
-    if (powf(ofRandomuf(), mutationCurve) < 0.2){
-        if (ofRandomf() > 0.5){
+    if (powf(ofRandomuf(), mutationCurve) < 0.7){
+        if (ofRandomuf() < 0.5){
             rules.push_back( new ShipRule() );
         }else{
             rules.push_back( new BulletRule() );
@@ -118,14 +126,11 @@ Ship::Ship(Ship * parent, float mutationCurve){
 }
 
 void Ship::makeRules(){
-    cout<<"hi"<<endl;
-
-    
-    int numRules = ofRandom(5,15);
+    int numRules = ofRandom(8,20);
     
     for (int i=0; i<numRules; i++){
         
-        if (ofRandomf() > 0.5){
+        if (ofRandomuf() < 0.5){
             rules.push_back( new ShipRule() );
         }else{
             rules.push_back( new BulletRule() );
@@ -287,9 +292,13 @@ void Ship::draw(){
     
     ofPopMatrix();
     
-    ofNoFill();
-    ofSetColor(255,0,0);
-    ofDrawCircle(pos.x, pos.y, size);
+    ofSetColor(255);
+    if (isDead) ofSetColor(150,60,60);
+    ofDrawBitmapString(fullName(), pos.x - fullName().size()*4, pos.y - size);
+    
+//    ofNoFill();
+//    ofSetColor(255,0,0);
+//    ofDrawCircle(pos.x, pos.y, size);
 }
 
 void Ship::fire(){
@@ -419,6 +428,41 @@ void Ship::setGameInfo( vector<Ship*> * ships ){
 //                }
             }
         }
+    }
+}
+
+string Ship::fullName(){
+    return name[0]+" "+name[1]+" "+name[2];
+}
+
+string Ship::createName(){
+    //21
+    char cons[] = {'b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z'};
+    //5
+    char vowels[] = { 'a', 'e', 'i', 'o', 'u' };
+    
+    int charsSinceVowel = 0;
+    
+    string word = "";
+    while(true){
+        //cout<<"word: "<<word<<endl;
+        
+        float chanceOfVowel = ofMap(charsSinceVowel, 0, 4, 0.2, 1);
+        float chanceOfDone = ofMap(word.size(), 2, 7, 0, 0.9, true);
+        //cout<<"space chance "<<chanceOfSpace<<endl;
+        if (ofRandomuf() < chanceOfDone){
+            return  word;
+        }
+        
+        if (ofRandomuf() < chanceOfVowel){
+            word += vowels[ (int)ofRandom(5)];
+            charsSinceVowel = 0;
+        }
+        else{
+            charsSinceVowel++;
+            word += cons[ (int)ofRandom(21)];
+        }
+        
     }
 }
 

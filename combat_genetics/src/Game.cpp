@@ -134,17 +134,27 @@ void Game::draw(){
     ofNoFill();
     ofDrawRectangle(0,0,arenaW, arenaH);
     
+    
+    //draw dead ships
     for (int i=0; i<ships.size(); i++){
-        //cout<<"draw ship "<<i<<" at "<<ships[i]->pos.x<<" "<<ships[i]->pos.y<<endl;
-        ships[i]->draw();
-        
+        if (ships[i]->isDead){
+            ships[i]->draw();
+        }
+    }
+    
+    //draw living ships and their bullets
+    for (int i=0; i<ships.size(); i++){
+        if (!ships[i]->isDead){
+            ships[i]->draw();
+        }
         for (int b=0; b<ships[i]->bullets.size(); b++){
             ships[i]->bullets[b].draw();
         }
     }
     
+    
     ofSetColor(255);
-    ofDrawBitmapString(ofToString(numTicks), 5, 15);
+    ofDrawBitmapString("ticks: "+ofToString(numTicks), 5, 15);
 }
 
 void Game::keyPressed(int key){
