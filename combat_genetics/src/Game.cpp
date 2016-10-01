@@ -28,7 +28,7 @@ void Game::setup(vector<Ship *> startingShips){
     for (int i=0; i<ships.size(); i++){
         float startX = arenaW/2 + cos(angleStep * i) * startDist;
         float startY = arenaH/2 + sin(angleStep * i) * startDist;
-        ships[i]->resetGame(startX, startY, angleStep * i + PI/4);
+        ships[i]->resetGame(startX, startY, angleStep * i + PI*0.9);
     }
     
     numTicks = 0;
@@ -65,6 +65,7 @@ void Game::update(){
             if (checkShipAgainstBullets(ships[i])){
                 ships[i]->isDead = true;
                 ships[i]->totalDeaths++;
+                ships[i]->bullets.clear();
             }
         }
     }

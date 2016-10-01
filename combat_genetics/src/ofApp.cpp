@@ -17,7 +17,7 @@ void ofApp::setup(){
     panel.setup("settings", ofGetWidth()-280, 0, 270, 400);
     panel.addPanel("settings");
     panel.setWhichPanel(0);
-    panel.addSliderInt("ticks_per_frame", 20, 1, 100);
+    panel.addSliderInt("ticks_per_frame", 1, 1, 100);
     panel.addSliderInt("max_ticks_per_game", 10000, 500, 100000);
     
     panel.addSlider("mutation_rate", 1, 0.2, 5);
@@ -37,6 +37,7 @@ void ofApp::setup(){
     for (int i=0; i<shipsWaiting.size(); i++){
         shipsWaiting[i] = new Ship();
     }
+    //shipsWaiting[0]->usePlayerControl = true;   //testing
     
     //start it up!
     game = NULL;

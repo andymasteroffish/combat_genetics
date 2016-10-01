@@ -11,8 +11,9 @@
 
 #include "ofMain.h"
 #include "ShipInfo.h"
+#include "BulletInfo.h"
 
-enum RuleType { RULE_SHIP };
+enum RuleType { RULE_SHIP, RULE_BULLET };
 
 class Rule{
 public:
@@ -21,10 +22,10 @@ public:
     void setupFromParent(Rule * parent);
     
     void reset();
-    bool check(vector<ShipInfo> * shipInfo, int shootCoolDownTimer);
+    bool check(vector<ShipInfo> * shipInfo, vector<BulletInfo> * bInfo, int shootCoolDownTimer);
     void tick();
     
-    virtual bool checkCustom(vector<ShipInfo> * shipInfo){ return false; }
+    virtual bool checkCustom(vector<ShipInfo> * shipInfo,  vector<BulletInfo> * bInfo){ return false; }
     
     void mutate();
     virtual void mutateCustom() {};

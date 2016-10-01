@@ -19,6 +19,9 @@ Ship::Ship(){
     totalKills = 0;
     totalDeaths = 0;
     
+    numKills = -1;
+    score = -1;
+    
     shootCoolDownTicks = 150;
     
     rules.clear();
@@ -27,8 +30,12 @@ Ship::Ship(){
     usePlayerControl = false;
     holdingThurst = holdingReverse = holdingLeft = holdingRight = holdingFire = false;
     
-    
-    makeRules();
+    //display the rules
+    cout<<"RULES"<<endl;
+    for (int i=0; i<rules.size(); i++){
+        cout<<i<<endl;
+        rules[i]->print();
+    }
 }
 
 Ship::Ship(Ship * parent, float mutationCurve){
@@ -56,17 +63,22 @@ Ship::Ship(Ship * parent, float mutationCurve){
             ShipRule * rule = new ShipRule( (ShipRule *) parent->rules[i], mutationCurve );
             rules.push_back(rule);
         }
+        if (parent->rules[i]->type == RULE_BULLET){
+            BulletRule * rule = new BulletRule( (BulletRule *) parent->rules[i], mutationCurve );
+            rules.push_back(rule);
+        }
     }
     
     //display the rules
-//    cout<<"RULES"<<endl;
-//    for (int i=0; i<rules.size(); i++){
-//        cout<<endl;
-//        cout<<i<<" parent"<<endl;
-//        parent->rules[i]->print();
-//        cout<<i<<" me"<<endl;
-//        rules[i]->print();
-//    }
+    cout<<"RULES"<<endl;
+    for (int i=0; i<rules.size(); i++){
+        cout<<endl;
+        cout<<i<<" parent"<<endl;
+        parent->rules[i]->print();
+        cout<<i<<" me"<<endl;
+        rules[i]->print();
+    }
+    
     
     //chance of removing a rule
     if (powf(ofRandomuf(), mutationCurve) < 0.2 && rules.size() > 0){
@@ -79,10 +91,24 @@ Ship::Ship(Ship * parent, float mutationCurve){
     
     //chance of adding a rule
     if (powf(ofRandomuf(), mutationCurve) < 0.2){
-        ShipRule * thisRule = new ShipRule();
-        rules.push_back(thisRule);
+        if (ofRandomf() > 0.5){
+            rules.push_back( new ShipRule() );
+        }else{
+            rules.push_back( new BulletRule() );
+        }
+        //rules.push_back(thisRule);
         //cout<<"added rule"<<endl;
         //thisRule->print();
+    }
+    
+    //high chance of swapping the order of a rule
+    if (powf(ofRandomuf(), mutationCurve) < 0.8){
+        int randA = ofRandom(rules.size());
+        int randB = ofRandom(rules.size());
+        Rule * temp = rules[randA];
+        rules[randA] = rules[randB];
+        rules[randB] = temp;
+        
     }
     
     
@@ -92,13 +118,18 @@ Ship::Ship(Ship * parent, float mutationCurve){
 }
 
 void Ship::makeRules(){
+    cout<<"hi"<<endl;
 
     
     int numRules = ofRandom(5,15);
     
     for (int i=0; i<numRules; i++){
-        ShipRule * thisRule = new ShipRule();
-        rules.push_back(thisRule);
+        
+        if (ofRandomf() > 0.5){
+            rules.push_back( new ShipRule() );
+        }else{
+            rules.push_back( new BulletRule() );
+        }
     }
     
     //select a random rule and have the command be fire
@@ -109,46 +140,85 @@ void Ship::makeRules(){
 
 void Ship::makeTestRules(){
     
+//    BulletRule * backup = new BulletRule();
+//    backup->usingMinDist = false;
+//    backup->usingMaxDist = false;
+//    backup->usingAngle = true;
+//    backup->minAngle = -PI/4;
+//    backup->maxAngle = PI/4;
+//    backup->usingGettingCloser = true;
+//    backup->command = COM_REVERSE;
+//    
+//    rules.push_back(backup);
     
+//    BulletRule * go = new BulletRule();
+//    go->usingMinDist = false;
+//    go->usingMaxDist = false;
+//    go->usingAngle = true;
+//    go->usingGettingCloser = false;
+//    go->command = COM_LEFT;
+//    go->coolDownTicks = 2;
     
+//    BulletRule * go1 = new BulletRule();
+//    go1->usingMinDist = true;
+//    go1->minDist = 300;
+//    go1->usingMaxDist = false;
+//    go1->usingAngle = false;
+//    go1->usingGettingCloser = true;
+//    go1->command = COM_LEFT;
+//    go1->coolDownTicks = 2;
+//    
+//    BulletRule * go2 = new BulletRule();
+//    go2->usingMinDist = false;
+//    go2->usingMaxDist = true;
+//    go2->maxDist = 100;
+//    go2->usingAngle = true;
+//    go2->minAngle = PI/2;
+//    go2->maxAngle = PI;
+//    go2->usingGettingCloser = false;
+//    go2->command = COM_THRUST;
+//    go2->coolDownTicks = 0;
+//    
+//    //rules.push_back(go1);
+//    rules.push_back(go2);
+//    
+//    ShipRule * turnRight = new ShipRule();
+//    turnRight->usingMinDist = false;
+//    turnRight->usingMaxDist = false;
+//    turnRight->usingAngle = true;
+//    turnRight->minAngle = -PI;
+//    turnRight->maxAngle = 0;
+//    turnRight->command = COM_RIGHT;
+//
+//    ShipRule * turnLeft = new ShipRule();
+//    turnLeft->usingMinDist = false;
+//    turnLeft->usingMaxDist = false;
+//    turnLeft->usingAngle = true;
+//    turnLeft->minAngle = 0;
+//    turnLeft->maxAngle = PI;
+//    turnLeft->command = COM_LEFT;
+//    
+//    ShipRule * goForward = new ShipRule();
+//    goForward->usingMinDist = true;
+//    goForward->usingMaxDist = false;
+//    goForward->minDist = 50;
+//    goForward->usingAngle = true;
+//    goForward->minAngle = -PI/8;
+//    goForward->maxAngle = PI/8;
+//    goForward->command = COM_THRUST;
+//    
+//    ShipRule * shoot = new ShipRule();
+//    shoot->usingMinDist = false;
+//    shoot->usingMaxDist = false;
+//    shoot->usingAngle = true;
+//    shoot->minAngle = -PI/10;
+//    shoot->maxAngle = PI/10;
+//    shoot->command = COM_FIRE;
     
-    ShipRule * turnRight = new ShipRule();
-    turnRight->usingMinDist = false;
-    turnRight->usingMaxDist = false;
-    turnRight->usingAngle = true;
-    turnRight->minAngle = -PI;
-    turnRight->maxAngle = 0;
-    turnRight->command = COM_RIGHT;
-    
-    ShipRule * turnLeft = new ShipRule();
-    turnLeft->usingMinDist = false;
-    turnLeft->usingMaxDist = false;
-    turnLeft->usingAngle = true;
-    turnLeft->minAngle = 0;
-    turnLeft->maxAngle = PI;
-    turnLeft->command = COM_LEFT;
-    
-    ShipRule * goForward = new ShipRule();
-    goForward->usingMinDist = true;
-    goForward->usingMaxDist = false;
-    goForward->minDist = 50;
-    goForward->usingAngle = true;
-    goForward->minAngle = -PI/8;
-    goForward->maxAngle = PI/8;
-    goForward->command = COM_THRUST;
-    
-    ShipRule * shoot = new ShipRule();
-    shoot->usingMinDist = false;
-    shoot->usingMaxDist = false;
-    shoot->usingAngle = true;
-    shoot->minAngle = -PI/10;
-    shoot->maxAngle = PI/10;
-    shoot->command = COM_FIRE;
-    
-    rules.push_back(shoot);
-    rules.push_back(goForward);
-    rules.push_back(turnRight);
-    rules.push_back(turnLeft);
+    //rules.push_back(shoot);
+    //rules.push_back(goForward);
+    //rules.push_back(turnRight);
+    //rules.push_back(turnLeft);
     
 }
 
@@ -259,7 +329,7 @@ Command Ship::getCommandFromRules(){
     
     //go through rules in order
     for (int i=0; i<rules.size(); i++){
-        if (rules[i]->check(&otherShipsInfo, shootCoolDownTimer)){
+        if (rules[i]->check(&otherShipsInfo, &otherBulletInfo, shootCoolDownTimer)){
             return rules[i]->command;
         }
     }
@@ -311,9 +381,11 @@ void Ship::keyReleased(int key){
 
 void Ship::setGameInfo( vector<Ship*> * ships ){
     otherShipsInfo.clear();
+    otherBulletInfo.clear();
     
     for (int i=0; i<ships->size(); i++){
         if (ships->at(i) != this && !ships->at(i)->isDead){
+            //get the ship info
             ShipInfo info;
             ofVec2f otherPos = ships->at(i)->pos;
             info.distSq = ofDistSquared(pos.x, pos.y, otherPos.x, otherPos.y);
@@ -321,6 +393,31 @@ void Ship::setGameInfo( vector<Ship*> * ships ){
             if (info.angleFromMe > PI)  info.angleFromMe -= TWO_PI;
             if (info.angleFromMe < -PI) info.angleFromMe += TWO_PI;
             otherShipsInfo.push_back(info);
+            
+            //get the info for each bullet that ship has active
+            for (int b=0; b<ships->at(i)->bullets.size(); b++){
+                ofVec2f bulPos = ships->at(i)->bullets[b].pos;
+                ofVec2f bulVel = ships->at(i)->bullets[b].vel;
+                
+                BulletInfo bInfo;
+                //distance
+                bInfo.distSq = ofDistSquared(pos.x, pos.y, bulPos.x, bulPos.y);
+                //angle to me
+                bInfo.angleFromMe = angle - atan2(pos.y-bulPos.y, pos.x-bulPos.x) + PI;
+                if (bInfo.angleFromMe > PI)  bInfo.angleFromMe -= TWO_PI;
+                if (bInfo.angleFromMe < -PI) bInfo.angleFromMe += TWO_PI;
+                //see where the bullet will be next frame
+                ofVec2f nextBulPos = bulPos + bulVel;
+                bInfo.gettingCloser = ofDistSquared(pos.x, pos.y, nextBulPos.x, nextBulPos.y) < bInfo.distSq;
+                
+                otherBulletInfo.push_back(bInfo);
+                
+//                if (!usePlayerControl){
+//                    cout<<"bullet distSq: "<<bInfo.distSq<<endl;
+//                    cout<<"bullet angle: "<<bInfo.angleFromMe<<endl;
+//                    cout<<"getting closer: "<<bInfo.gettingCloser<<endl;
+//                }
+            }
         }
     }
 }

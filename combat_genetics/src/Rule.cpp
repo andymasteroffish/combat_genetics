@@ -11,7 +11,7 @@
 
 
 void Rule::setupFresh(){
-    coolDownTicks = MAX(0, ofRandom(-10, 10));
+    coolDownTicks = MAX(0, ofRandom(-20, 20));
     
     
     command = (Command) (int) ofRandom(COM_WAIT+1);
@@ -26,10 +26,10 @@ void Rule::reset(){
     coolDownTimer = 0;
 }
 
-bool Rule::check(vector<ShipInfo> * shipInfo, int shootCoolDownTimer){
+bool Rule::check(vector<ShipInfo> * shipInfo, vector<BulletInfo> * bInfo, int shootCoolDownTimer){
     if (coolDownTimer < 0){
         if (command != COM_FIRE || shootCoolDownTimer < 0){
-            if( checkCustom(shipInfo) ){
+            if( checkCustom(shipInfo, bInfo) ){
                 coolDownTimer = coolDownTicks;
                 return true;
             }
@@ -50,7 +50,7 @@ void Rule::mutate(){
     
     //chance of changing cool down
     coolDownTicks += ofRandom(-3,3);
-    coolDownTicks = CLAMP(coolDownTicks, -5, 15);
+    coolDownTicks = CLAMP(coolDownTicks, -15, 20);
     
     //chance of changing funciton
     if (powf(ofRandomuf(), mutationCurve) < 0.15f){

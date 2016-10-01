@@ -45,14 +45,14 @@ ShipRule::ShipRule( ShipRule * parent, float _mutaionCurve){
     mutate();
 }
 
-bool ShipRule::checkCustom(vector<ShipInfo> *shipInfo){
+bool ShipRule::checkCustom(vector<ShipInfo> *shipInfo,  vector<BulletInfo> * bInfo){
     //cout<<"checking "<<shipInfo->size()<<endl;
     for (int i=0; i<shipInfo->size(); i++){
         ShipInfo info = shipInfo->at(i);
         
         //cout<<"ang from me: "<<info.angleFromMe/PI<<endl;
         
-        bool minDistPass = !usingMaxDist;
+        bool minDistPass = !usingMinDist;
         bool maxDistPass = !usingMaxDist;
         bool anglePass = !usingAngle;
         
@@ -111,8 +111,8 @@ void ShipRule::keepRangesReasonable(){
         maxAngle = temp;
     }
     
-    minDist = CLAMP(minDist, 0, 500);
-    maxDist = CLAMP(maxDist, 0, 500);
+    minDist = CLAMP(minDist, 0, ARENA_W);
+    maxDist = CLAMP(maxDist, 0, ARENA_W);
     if (minDist > maxDist){
         float temp = minDist;
         minDist = maxDist;

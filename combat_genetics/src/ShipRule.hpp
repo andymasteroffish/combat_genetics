@@ -20,7 +20,7 @@ public:
     ShipRule();
     ShipRule( ShipRule * parent, float _mutationCurve);
     
-    bool checkCustom(vector<ShipInfo> * shipInfo);
+    bool checkCustom(vector<ShipInfo> * shipInfo,  vector<BulletInfo> * bInfo);
     void mutateCustom();
     
     void keepRangesReasonable();

@@ -14,8 +14,10 @@
 
 #include "Rule.hpp"
 #include "ShipRule.hpp"
+#include "BulletRule.hpp"
 
 #include "ShipInfo.h"
+#include "BulletInfo.h"
 
 
 class Ship{
@@ -66,6 +68,7 @@ public:
     
     //info about the field
     vector<ShipInfo> otherShipsInfo;
+    vector<BulletInfo> otherBulletInfo;
     
     //round data
     int numKills;
