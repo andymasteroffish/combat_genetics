@@ -152,9 +152,6 @@ void Game::draw(){
         }
     }
     
-    
-    ofSetColor(255);
-    ofDrawBitmapString("ticks: "+ofToString(numTicks), 5, 15);
 }
 
 void Game::keyPressed(int key){

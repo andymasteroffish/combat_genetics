@@ -15,7 +15,7 @@ void ofApp::setup(){
     
     //prepare panel
     hidePanel = false;
-    panel.setup("settings", 0, 0, ARENA_H-100, 170);
+    panel.setup("settings", 0, 0, ARENA_W-100, 130);
     panel.addPanel("settings");
     panel.setWhichPanel(0);
     panel.addSliderInt("ticks_per_frame", 50, 1, 200);
@@ -243,18 +243,24 @@ void ofApp::draw(){
     ofPushMatrix();
     ofTranslate(5, 180);
     game->draw();
+    ofSetColor(255);
+    
+    ofDrawBitmapString("gen: "+ofToString(generationCount)+"  game: "+ofToString(gameCount), 5, -5);
+    ofDrawBitmapString("ticks: "+ofToString(game->numTicks), 200, -5);
+    ofDrawBitmapString("Space to pause\nR to skip round", 400, -21);
     ofPopMatrix();
     
-    ofSetColor(255);
-    ofDrawBitmapString("gen: "+ofToString(generationCount)+"  game: "+ofToString(gameCount), 10, 35);
+    
+    
+    if (!hidePanel){
+        panel.draw();
+    }
     
     for (int i=0; i<infoBoxes.size(); i++){
         infoBoxes[i].draw();
     }
     
-    if (!hidePanel){
-        panel.draw();
-    }
+    
 }
 
 //--------------------------------------------------------------
