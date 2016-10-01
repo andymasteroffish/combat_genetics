@@ -7,6 +7,8 @@
 #include "Game.hpp"
 #include "Ship.hpp"
 
+#include "InfoBox.hpp"
+
 
 class ofApp : public ofBaseApp{
 
@@ -49,5 +51,8 @@ public:
     Game * game;
     int numShipsPerGame;
     int generationCount, gameCount;
+    
+    //leanring about the combatants
+    vector<InfoBox> infoBoxes;
 		
 };

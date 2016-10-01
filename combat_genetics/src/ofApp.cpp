@@ -10,16 +10,16 @@ void ofApp::setup(){
     ofBackground(0);
     
     //basic info
-    numShips = 64;
-    numShipsPerGame = 8;
+    numShips = 48;
+    numShipsPerGame = 6;
     
     //prepare panel
     hidePanel = false;
-    panel.setup("settings", ofGetWidth()-280, 0, 270, 400);
+    panel.setup("settings", 0, 0, ARENA_H-100, 170);
     panel.addPanel("settings");
     panel.setWhichPanel(0);
-    panel.addSliderInt("ticks_per_frame", 40, 1, 200);
-    panel.addSliderInt("max_ticks_per_game", 7000, 500, 50000);
+    panel.addSliderInt("ticks_per_frame", 50, 1, 200);
+    panel.addSliderInt("max_ticks_per_game", 10000, 500, 50000);
     
     panel.addSlider("mutation_rate", 1, 0.2, 5);
                 
@@ -33,12 +33,51 @@ void ofApp::setup(){
     
     paused = false;
     
+    //setup info boxes
+    infoBoxes.resize(numShips);
+    float boxW = ARENA_W/2 - 15;
+    float boxH = 31;
+    for (int i=0; i<numShips; i++){
+        
+        float startX = ARENA_W + 15;
+        float startY = 5;
+        
+        int yPos = i;
+        
+        if (i >= numShips/2){
+            startX += boxW + 10;
+            yPos = i-numShips/2;
+        }
+        
+        infoBoxes[i].setup(i+1, startX, startY+(boxH+2)*yPos, boxW, boxH);
+        
+        
+//        if (i < 11){
+//            float startX = 5;
+//            float startY = ARENA_H + 15;
+//            infoBoxes[i].setup(i+1, startX, startY+(boxH+2)*i, boxW, boxH);
+//        }else if (i<22){
+//            float startX = 25+boxW;
+//            float startY = ARENA_H + 15;
+//            infoBoxes[i].setup(i+1, startX, startY+(boxH+2)*(i-11), boxW, boxH);
+//        }else if (i<51){
+//            float startX = 45+boxW*2;
+//            float startY = 21;
+//            infoBoxes[i].setup(i+1, startX, startY+(boxH+2)*(i-22), boxW, boxH);
+//        }else{
+//            float startX = 65+boxW*3;
+//            float startY = 21;
+//            infoBoxes[i].setup(i+1, startX, startY+(boxH+2)*(i-51), boxW, boxH);
+//        }
+    }
+    
     //start with random ships
     shipsWaiting.resize(numShips);
     shipsSorted.resize(numShips);
     for (int i=0; i<shipsWaiting.size(); i++){
         shipsWaiting[i] = new Ship();
         shipsSorted[i] = shipsWaiting[i];
+        infoBoxes[i].setShip(shipsWaiting[i]);
     }
     //shipsWaiting[0]->usePlayerControl = true;   //testing
     
@@ -83,6 +122,7 @@ void ofApp::endGame(){
         
         //age them
         game->ships[i]->age++;
+        game->ships[i]->currentlyPlaying = false;
         //add them to the done list
         shipsDone.push_back(game->ships[i]);
     }
@@ -148,6 +188,11 @@ void ofApp::startNextGeneration(){
     //but sorted
     ofSort(shipsSorted, ofApp::shipSort);
     
+    //send this to the info boxes
+    for (int i=0; i<numShips; i++){
+        infoBoxes[i].setShip(shipsSorted[i]);
+    }
+    
     //show what we've got
     cout<<endl<<"new ship list:"<<endl;
     for (int i=0; i<shipsSorted.size(); i++){
@@ -196,12 +241,16 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
     ofPushMatrix();
-    ofTranslate(5, 5);
+    ofTranslate(5, 180);
     game->draw();
     ofPopMatrix();
     
     ofSetColor(255);
     ofDrawBitmapString("gen: "+ofToString(generationCount)+"  game: "+ofToString(gameCount), 10, 35);
+    
+    for (int i=0; i<infoBoxes.size(); i++){
+        infoBoxes[i].draw();
+    }
     
     if (!hidePanel){
         panel.draw();
@@ -228,6 +277,10 @@ void ofApp::keyReleased(int key){
 void ofApp::mouseMoved(int x, int y ){
     if (!hidePanel){
         panel.mouseMoved(x, y);
+    }
+    
+    for (int i=0; i<infoBoxes.size(); i++){
+        infoBoxes[i].mouseMoved(x, y);
     }
 }
 

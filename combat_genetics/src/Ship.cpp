@@ -21,6 +21,7 @@ Ship::Ship(){
     
     numKills = -1;
     score = -1;
+    currentlyPlaying = false;
     
     shootCoolDownTicks = 150;
     
@@ -60,6 +61,7 @@ Ship::Ship(Ship * parent, float mutationCurve){
     age = 0;
     totalKills = 0;
     totalDeaths = 0;
+    currentlyPlaying = false;
     
     numKills = -1;  //this will be reset to 0 when a round start
     score = -1;
@@ -234,6 +236,7 @@ void Ship::resetGame(float startX, float startY, float startAngle){
     shootCoolDownTimer = 0;
     
     isDead = false;
+    currentlyPlaying = true;
     
     numKills = 0;
     winnerBonus = 1;
@@ -451,6 +454,7 @@ string Ship::createName(){
         float chanceOfDone = ofMap(word.size(), 2, 7, 0, 0.9, true);
         //cout<<"space chance "<<chanceOfSpace<<endl;
         if (ofRandomuf() < chanceOfDone){
+            word[0] = (char) ((int)word[0] - 32);
             return  word;
         }
         

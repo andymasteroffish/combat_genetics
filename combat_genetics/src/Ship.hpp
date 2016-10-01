@@ -77,6 +77,7 @@ public:
     int numKills;
     float winnerBonus;
     float score;
+    bool currentlyPlaying;
     
     //persistent data
     int age;

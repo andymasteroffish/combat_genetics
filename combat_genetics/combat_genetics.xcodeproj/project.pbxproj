@@ -16,6 +16,7 @@
 		576E863E1D9EFF820018FC5E /* ShipRule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 576E863C1D9EFF820018FC5E /* ShipRule.cpp */; };
 		576E86401D9F02200018FC5E /* Rule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 576E863F1D9F02200018FC5E /* Rule.cpp */; };
 		578990A31DA055640076792A /* BulletRule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 578990A11DA055640076792A /* BulletRule.cpp */; };
+		578990A71DA069FF0076792A /* InfoBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 578990A51DA069FF0076792A /* InfoBox.cpp */; };
 		57BB1EBA1D9EC47500CCB2FB /* Ship.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57BB1EB81D9EC47500CCB2FB /* Ship.cpp */; };
 		57BB1EBD1D9EC47C00CCB2FB /* Bullet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57BB1EBB1D9EC47C00CCB2FB /* Bullet.cpp */; };
 		57BB1EC01D9EC48400CCB2FB /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57BB1EBE1D9EC48400CCB2FB /* Game.cpp */; };
@@ -100,6 +101,8 @@
 		578990A01DA0513E0076792A /* BulletInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BulletInfo.h; sourceTree = "<group>"; };
 		578990A11DA055640076792A /* BulletRule.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BulletRule.cpp; sourceTree = "<group>"; };
 		578990A21DA055640076792A /* BulletRule.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BulletRule.hpp; sourceTree = "<group>"; };
+		578990A51DA069FF0076792A /* InfoBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InfoBox.cpp; sourceTree = "<group>"; };
+		578990A61DA069FF0076792A /* InfoBox.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = InfoBox.hpp; sourceTree = "<group>"; };
 		579942931DA00C80008C7940 /* BasicInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BasicInfo.h; sourceTree = "<group>"; };
 		57BB1EB81D9EC47500CCB2FB /* Ship.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Ship.cpp; sourceTree = "<group>"; };
 		57BB1EB91D9EC47500CCB2FB /* Ship.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Ship.hpp; sourceTree = "<group>"; };
@@ -268,6 +271,8 @@
 				576E863C1D9EFF820018FC5E /* ShipRule.cpp */,
 				578990A21DA055640076792A /* BulletRule.hpp */,
 				578990A11DA055640076792A /* BulletRule.cpp */,
+				578990A61DA069FF0076792A /* InfoBox.hpp */,
+				578990A51DA069FF0076792A /* InfoBox.cpp */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -463,6 +468,7 @@
 				63B57AC5BF4EF088491E0317 /* ofxXmlSettings.cpp in Sources */,
 				933A2227713C720CEFF80FD9 /* tinyxml.cpp in Sources */,
 				9D44DC88EF9E7991B4A09951 /* tinyxmlerror.cpp in Sources */,
+				578990A71DA069FF0076792A /* InfoBox.cpp in Sources */,
 				578990A31DA055640076792A /* BulletRule.cpp in Sources */,
 				5A4349E9754D6FA14C0F2A3A /* tinyxmlparser.cpp in Sources */,
 			);
