@@ -14,7 +14,7 @@ void Rule::setupFresh(){
     coolDownTicks = MAX(0, ofRandom(-20, 20));
     
     
-    command = (Command) (int) ofRandom(COM_WAIT+1);
+    command = (Command) (int) ofRandom(COM_WAIT);
 }
 
 void Rule::setupFromParent(Rule * parent){
@@ -53,7 +53,7 @@ void Rule::mutate(){
     coolDownTicks = CLAMP(coolDownTicks, -15, 20);
     
     //chance of changing funciton
-    if (powf(ofRandomuf(), mutationCurve) < 0.15f){
+    if (powf(ofRandomuf(), mutationCurve) < 0.1f){
         command = (Command) (int) ofRandom(COM_WAIT+1);
     }
     

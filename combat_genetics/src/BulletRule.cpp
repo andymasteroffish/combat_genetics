@@ -89,7 +89,7 @@ bool BulletRule::checkCustom(vector<ShipInfo> *shipInfo,  vector<BulletInfo> * b
 
 void BulletRule::mutateCustom(){
     
-    float baseSwitchChance = 0.2;
+    float baseSwitchChance = 0.1;
     
     //cout<<"my mut curve "<<mutationCurve<<endl;
     

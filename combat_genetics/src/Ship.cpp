@@ -91,7 +91,7 @@ Ship::Ship(Ship * parent, float mutationCurve){
     
     
     //chance of removing a rule
-    if (powf(ofRandomuf(), mutationCurve) < 0.7 && rules.size() > 0){
+    if (powf(ofRandomuf(), mutationCurve) < 0.3 && rules.size() > 0){
         int randID = ofRandom(rules.size());
         //cout<<"kill rule "<<randID<<endl;
         //rules[randID]->print();
@@ -100,7 +100,7 @@ Ship::Ship(Ship * parent, float mutationCurve){
     }
     
     //chance of adding a rule
-    if (powf(ofRandomuf(), mutationCurve) < 0.7){
+    if (powf(ofRandomuf(), mutationCurve) < 0.3){
         if (ofRandomuf() < 0.5){
             rules.push_back( new ShipRule() );
         }else{
@@ -450,7 +450,7 @@ string Ship::createName(){
     while(true){
         //cout<<"word: "<<word<<endl;
         
-        float chanceOfVowel = ofMap(charsSinceVowel, 0, 4, 0.2, 1);
+        float chanceOfVowel = ofMap(charsSinceVowel, 0, 3, 0.2, 1);
         float chanceOfDone = ofMap(word.size(), 2, 7, 0, 0.9, true);
         //cout<<"space chance "<<chanceOfSpace<<endl;
         if (ofRandomuf() < chanceOfDone){

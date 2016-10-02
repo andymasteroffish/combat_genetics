@@ -121,7 +121,6 @@ void ofApp::endGame(){
         
         
         //age them
-        game->ships[i]->age++;
         game->ships[i]->currentlyPlaying = false;
         //add them to the done list
         shipsDone.push_back(game->ships[i]);
@@ -145,14 +144,19 @@ void ofApp::startNextGeneration(){
     
     mutationCurve = panel.getValueF("mutation_rate");
     
+    //age everybody
+    for (int i=0; i<shipsDone.size(); i++){
+        shipsDone[i]->age++;
+    }
+    
     
     //first sort this generation
     ofSort(shipsDone, ofApp::shipSort);
     
     shipsWaiting.clear();
     
-    //the top 1/8th gets to stay and have two babies
-    //the second 1/8 gets to stay and have one baby
+    //the top 1/8th gets to stay and have 3 babies
+    //the second 1/8 gets to stay and have 1 baby
     int numSectionSlice = numShips * 0.125;
     //cout<<"grab "<<numSectionSlice<<" ships per section"<<endl;
     //grab the winners
@@ -160,6 +164,11 @@ void ofApp::startNextGeneration(){
         shipsWaiting.push_back(shipsDone[0]);
         shipsWaiting.push_back( new Ship(shipsDone[0], mutationCurve) );
         shipsWaiting.push_back( new Ship(shipsDone[0], mutationCurve) );
+        shipsWaiting.push_back( new Ship(shipsDone[0], mutationCurve) );
+        //the ship in 1st place gets an extra baby
+        if (i==0){
+            shipsWaiting.push_back( new Ship(shipsDone[0], mutationCurve) );
+        }
         shipsDone.erase( shipsDone.begin() );
     }
     //grab the runner ups
@@ -245,7 +254,7 @@ void ofApp::draw(){
     game->draw();
     ofSetColor(255);
     
-    ofDrawBitmapString("gen: "+ofToString(generationCount)+"  game: "+ofToString(gameCount), 5, -5);
+    ofDrawBitmapString("gen: "+ofToString(generationCount)+"  game: "+ofToString(gameCount)+"/"+ofToString(numShips/numShipsPerGame), 5, -5);
     ofDrawBitmapString("ticks: "+ofToString(game->numTicks), 200, -5);
     ofDrawBitmapString("Space to pause\nR to skip round", 400, -21);
     ofPopMatrix();

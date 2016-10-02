@@ -81,7 +81,7 @@ bool ShipRule::checkCustom(vector<ShipInfo> *shipInfo,  vector<BulletInfo> * bIn
 
 void ShipRule::mutateCustom(){
     
-    float baseSwitchChance = 0.2;
+    float baseSwitchChance = 0.1;
     
     //cout<<"my mut curve "<<mutationCurve<<endl;
     
