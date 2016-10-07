@@ -1,0 +1,9 @@
+<ticks_per_frame>
+    <val_0>1</val_0>
+</ticks_per_frame>
+<max_ticks_per_game>
+    <val_0>10000</val_0>
+</max_ticks_per_game>
+<mutation_rate>
+    <val_0>1</val_0>
+</mutation_rate>
