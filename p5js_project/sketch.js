@@ -62,6 +62,18 @@ var infoBoxes = new Array();
 //test
 var fpsTesto = new Array();
 
+//dealing with losing focus
+var timeOfLastUpdate = 0;
+
+//this interval will run ever second, even when the tab is not active. If it finds that the tab was innactive, it does a full seconds worth of updates
+setInterval(function() {
+    if (millis() - timeOfLastUpdate > 500){
+        for (var i=0; i<60; i++){
+            updateGame();
+        }
+    }
+}, 1000);
+
 function setup() {
 	createCanvas(arenaW+screenPadding*2, arenaH+screenPadding*2);
 
@@ -220,19 +232,6 @@ function startNextGeneration(){
     }
     //but sorted
     shipsSorted.sort(shipSort);
-    
-    //send this to the info boxes
-    // for (var i=0; i<numShips; i++){
-    //     infoBoxes[i].setShip(shipsSorted[i]);
-    // }
-    
-    //show what we've got
-    // console.log("");
-    // console.log("new ship list:");
-    // for (var i=0; i<shipsSorted.length; i++){
-    //     console.log(i+" - "+shipsSorted[i].fullName());
-    //     console.log("age: "+shipsSorted[i].age+ "  gen: "+shipsSorted[i].generations+"  score prev round: "+shipsSorted[i].score+"  total kills: "+shipsSorted[i].totalKills+"  total deaths: "+shipsSorted[i].totalDeaths);
-    // }
 
     //update the info boxs
 	resetInfoBoxes();
@@ -257,27 +256,16 @@ function startNextGeneration(){
 function draw() {
     background(0);
 
+    //this lets us know if the window lost focus and stopped updating
+    timeOfLastUpdate = millis();
+
 	updateGame();
 	drawGame();
-
-    // fpsTesto.push( frameRate() );
-    // if (fpsTesto > 20){
-    //     fpsTesto.splice( 0, 1);
-    // }
-
-    // var total = 0;
-    // for (var i=0; i<fpsTesto.length; i++){
-    //     total += fpsTesto[i];
-    // }
-    // total /= fpsTesto.length;
-
-    // fill(255);
-    // text( total, 100, 100);
 }
 
 function updateGame(){
-	//panel.update();
-
+	
+    //console.log("gen: "+generationCount+"  game: "+gameCount+"/"+ Math.ceil(numShips/numShipsPerGame));
 	
 	var curvedTickVal = Math.pow(ticksSlider.value, 2);
 	numTicksPerFrame = Math.floor(1 + curvedTickVal * 999);
@@ -365,4 +353,7 @@ function shipSort( a, b ) {
 function distSquared( x1,  y1,  x2,  y2) {
 	return ( (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2) );
 }
+
+
+
 
