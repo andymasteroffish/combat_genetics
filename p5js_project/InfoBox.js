@@ -5,6 +5,7 @@ function InfoBox(_rank){
 	this.div = createDiv('');
     this.div.addClass('info_box');
     this.div.id("info_box_"+this.rank);
+    this.div.parent("ship_info");
 
     this.expandedInfo = null;
 
@@ -33,6 +34,10 @@ function InfoBox(_rank){
         text += "kills: "+(this.ship.totalKills)+" ";
         text += "deaths: "+(this.ship.totalDeaths)+" ";
 		this.div.html(text);
+
+		if (this.expandedInfo != null){
+			this.toggleOpen();
+		}
 	}
 
 	this.toggleOpen = function(){

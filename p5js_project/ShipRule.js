@@ -129,7 +129,7 @@ function ShipRule(parent, _mutationCurve){
 	this.getHTML = function(orderNum){
 		var haveStatedIt = false;
 		var text = "";
-		text += "<p class='rule_name'>"+(orderNum+1)+". Command Rule: "+this.getCommandName(this.command)+"</p>";
+		text += "<p class='rule_name'>"+(orderNum+1)+". Action: "+this.getCommandName(this.command)+"</p>";
 	    text += "<p class='rule_text'>Cool down: "+Math.floor(this.coolDownTicks)+"</p>";
 	    if (this.usingMinDist){
 	        text += "<p class='rule_text'>"+(haveStatedIt ? "That" : "Another")+" ship must be at least: "+Math.floor(this.minDist)+" px away</p>";

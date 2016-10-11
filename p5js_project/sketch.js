@@ -85,6 +85,7 @@ function setup() {
 
 	//start with random ships
     numShips = generationSizeField.value;
+    //numShips = 2;//testing
     for (var i=0; i<numShips; i++){
         shipsWaiting.push ( new Ship(null, mutationCurve) );
         shipsSorted.push ( shipsWaiting[i] );
@@ -107,6 +108,8 @@ function startNextGame(){
         shipsPerGameField.value = 2;
     }
     numShipsPerGame = shipsPerGameField.value;
+
+    //numShipsPerGame = 2;    //testing
     
 
     //grab the next set of ships

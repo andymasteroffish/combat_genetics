@@ -20,42 +20,133 @@
   <style> 
   	body {padding: 0; margin: 0;  background-color: #000000; color: #ffffff} 
 
-  	#defaultCanvas0{ position:absolute; top:0px; left:150px;}
+    a {color: #ffffff;}
 
-  	.info_box{ margin-left: 780px; padding-bottom: 15px; color: #bbbbbb;}
+    h1 { padding-left: 20px; margin-bottom: 10px;}
+    
+
+    h2 {font-size: 22px;}
+
+  	#defaultCanvas0{ position: absolute; left:10px; top:110px;}
+
+    #controls{ padding-left: 15px; padding-top: 5px; overflow: auto; height:60px; }
+    .control{ float:left; width:150px;}
+    .control p{ margin-top: 0px; }
+    .slider{ margin-top: -10px; }
+
+    #ship_info{ margin-left: 640px; }
+  	.info_box{ padding-left: 5px; padding-top: 5px;  padding-bottom: 5px; color: #bbbbbb; width:400px; border: 1px solid white; }
     .info_box_fighting{ color: #ffffff;}
     .info_box_dead{  color: #ff9999;}
 
     .rule_name{  margin-left: 10px;}
     .rule_text{  margin-left: 25px; margin-top: -15px;}
 
+    #description{ width: 600px; position: absolute; left:15px; top:725px;}
+
   </style>
 </head>
 
 <body>
   <div>
-  	<p id="ticks_per_frame_text">ticks per frame: </p>
-  	<input type="range" step=0.01 id="ticks_slider" name="slider" min="0" max="1" value = "0">
+    <h1>Genetic Combat by <a href="https://twitter.com/Andy_Makes" target="_blank">Andy Wallace</a></h1>
   </div>
-  <div>
-    <p id="ticks_per_game_text">Max ticks per game : </p>
-    <input type="range" id="ticks_per_game_slider" name="slider" min="1000" max="20000" value = "7000">
-  </div>
-  <div>
-  	<p id="mutation_text">mutation val : </p>
-  	<input type="range" step=0.01 id="mutation_slider" name="slider" min="0.2" max="3" value = "1">
-  </div>
-  <div>
-  <label>Generation Size:<input type="number"  id="generation_size" value = 24></label>
-  </div>
-  <div>
-  <label>Ships per game:<input type="number"  id="ships_per_game" value = 6></label>
-  </div>
-  <div>
-  <label><input type="checkbox" id="disable_draw_box" value="first_checkbox">Disable Draw<br>(increases simulation speed)</label>
+  <div id = "controls">
+    <div class="control">
+    	<p id="ticks_per_frame_text">ticks per frame: </p>
+    	<input type="range" step=0.01 id="ticks_slider" name="slider" min="0" max="1" value = "0" class="slider">
+    </div>
+    <div class="control">
+      <p id="ticks_per_game_text">Max ticks per game : </p>
+      <input type="range" id="ticks_per_game_slider" name="slider" min="1000" max="20000" value = "7000" class="slider">
+    </div>
+    <div class="control">
+    	<p id="mutation_text">mutation val : </p>
+    	<input type="range" step=0.01 id="mutation_slider" name="slider" min="0.2" max="3" value = "1" class="slider">
+    </div>
+    <div class="control">
+      <label>Generation Size:<input type="number"  id="generation_size" value = 144></label>
+    </div>
+    <div class="control">
+      <label>Ships per game:<input type="number"  id="ships_per_game" value = 6></label>
+    </div>
+    <div class="control">
+      <label><input type="checkbox" id="disable_draw_box" value="first_checkbox">Disable Draw<br>(increases sim speed)</label>
+    </div>
   </div>
 
-  <div class="info_box">Click a ship to expand its behavior rules</div>
+  <div id = "ship_info">
+    <div style="padding-bottom: 15px;">Click a ship's box to expand its behavior rules</div>
+  </div>
+
+  <div id = "description">
+    <h2>About</h2>
+    <p>
+    This simulation attempts to create effective spaceship shooter AI using a genetic algorithm. The game itself is roughly based on <a href="https://www.youtube.com/watch?v=3m86ftny1uY" target="_blank">Combat for the Atari 2600</a>. When it starts, all ships are created with a completely randomized set of rules that govern their behavior. Once all of the ships in a given generation get a chance to compete, the ones that got the most kills (with a bonus for not dying themselves) are allowed to continue to the next generation and to have children. The children inherit the same set of behaviors that the parents had, but mutate them slightly: a value gets changed here and there, maybe a rule gets removed or a new one gets added. Even though these changes are random, over many generations the natural selection process selects for mutations that make them more effective pilots.
+    </p>
+    <p>
+    I recomend maxing out the ticks-per frame and letting it run for a while, slowing it down when you want to check in. Check out how different your ships are 100 generations in and 1000 generations in!
+    </p>
+    <p>
+    This project was inspired by <a href="http://rednuht.org/genetic_cars_2/" target="_blank">Genetic Cars 2</a> by <a href="http://rednuht.org/" target="_blank">Rafael Matsunaga</a> which is worth gazing at for hours.
+    </p>
+
+
+    <h2>Behavior Rules</h2>
+    <p>
+    At the core of the ship AI is a set of behavior rules. Each new ship gets between 8 and 20 rules and these rules specify some condition and an action to take if that condition is met. With every tick of the game, each ship goes through its list of rules starting with the first one and checking if the board state meets the requirement. When it finds one who’s condition is satisfied, the ships takes that action and is done for that tick. Rules can have a cool down time so that they can’t go off twice in a row allowing rules under them to have a chance even if their condition is still met.
+    </p>
+    <p>
+    The FIRE action is special in that ships cannot fire every tick. All rules with the FIRE action are ignored unless enough ticks have passed since the last time the ship shot. Currently a ship can only fire every 150 ticks.
+    </p>
+    <p>
+    When a child inherits and mutates a parent’s behaviors, all numerical values (including cool down time) have a chance of going up or down slightly, and the conditions for a rule have a small chance of changing (a minimum distance requirement might become a maximum distance requirement or a rule might stop being concerned with the angle that another ship has in relation to itself).
+    </p>
+
+
+    <h2>Generations and Natural Selection</h2>
+    <p>
+    Once every ship in a given generation gets a chance to compete, they are all given a score that starts as their number of kills in their game. This is multiplied by 1.5 if they were the last ship standing in their game (if a game ended by running out of time, no ship in that game get this bonus). The top 1/4 are allowed to continue to the next generation and the remaining 3/4 are removed.
+    </p>
+    <p>
+    Besides being allowed to continue, those ships that survived are allowed to reproduce. All ships that survived get one child, and the top 1/8 from the previous generation get two additional children (three total). The remaining slots are filled with brand new ships with completely randomized behaviors.
+    </p>
+    <p>
+    The scoring only takes into consideration the most recent round. Results from games played in previous generations are listed in the ships stats on the right but do not factor into wether or not it will be allowed to survive and reproduce. Even if a ship came out on top 5 generations in a row, if it has a game where it gets no kills, it’s out (although presumably its offspring will be numerous at that point).
+    </p>
+
+    <h2>Names</h2>
+    <p>
+    To track particular family lines, I created a simple name generator (it basically just strings letters together and makes sure that there are a few vowels in there). Every ship has a first, middle, and last name. When a brand new ship is created, all three of these are randomized.
+    </p>
+    <p>
+    When a ship is the child of an existing ship, it takes the last name of the parent and uses the parent’s first name as its middle name. The child then generates a brand new first name.
+    </p>
+    <p>
+    All ships that share the same common ancestor will have the same last name, making it easy to track the effectiveness of a given clan.
+    </p>
+
+    <h2>Technical</h2>
+    <p>
+    This was originally written in <a href="openframeworks.cc" target="_blank">openFrameworks</a>. Because I wanted it to exist on the web, I converted it to <a href="https://p5js.org/" target="_blank">p5.js</a>. This is only my second foray into p5.js so I'm still figuring it out (my first was a simple video experiment, <a href="satan.dance" target="_blank">satan.dance</a>). Both code bases are available here: <a href="https://github.com/andymasteroffish/combat_genetics" target="_blank">https://github.com/andymasteroffish/combat_genetics</a>.
+    </p>
+
+
+    <h2>Takeaways</h2>
+    <p>
+    AI in games is a fascinating problem, and one that I have largely ignored in my own work. I’ve always opted for extremely simple opponents, and I think that in general simple works best. In a lot of ways, this genetic algorithm approach to Combat AI is also very simple: I defined the rules and the various “senses” that each ship has, but I never had to dictate strategy. I’ve always felt more at home with system design than level design, so this feels natural to me.
+    </p>
+    <p>
+    I’ve also been thinking about why I find it so appealing to watch these little ships fly around; why they feel like my babies. My friend <a href="https://twitter.com/gameDesignerBen" target="_blank">Ben Johnson</a> was talking to me about game AI for an e-sport game he was making a while back and he said that he no longer attempts to make whip-smart Ai; that he prefers to make what he called “puppy AI.” Puppy AI runs around and will try to some extent to reach the game goals, but the main focus is to appear playful. His AI had slightly erratic movement and would often just run very quickly at its human teammate. The result was an AI that I felt very comfortable playing with and which I regarded warmly. It wasn’t until he told me his puppy design scheme that I realized that it wasn’t a particularly good player.
+    </p>
+    <p>
+    Because there is randomness in the way these ships operate, even after many many generations, they feel more lifelike. Genetic algorithms are often seen as a way to bring a large amount of computing power to bear on a problem in order to find a solution. But at the end of this I do not have a perfect Combat AI. However there is a certain livelihood or even confusion to the ships which I think would have been nearly impossible to define by hand. I love creating game systems because I love being surprised by what can happen within them. The natural selection process on display here amped that up considerably. Playfulness was not an expected outcome, but I’m glad to see it join the party!
+    </p>
+
+    <br>
+    <p>Javascript and editting help from <a href="http://janefriedhoff.com/" target="_blank">Jane Friedhoff</a>.</p>
+
+  </div>
 
 </body>
 </html>

@@ -56,6 +56,7 @@ function Ship(parent, mutationCurve){
             this.name[0] = this.createName();
             this.name[1] = this.createName();
             this.name[2] = this.createName();
+            //this.makeTestRules();
             this.makeRules();
         }
     }
@@ -149,7 +150,16 @@ function Ship(parent, mutationCurve){
     }
 
     this.makeTestRules = function(){
-        
+        var testo = new BulletRule();
+        testo.command = Command.COM_LEFT;
+        testo.usingMinDist = false;
+        testo.usingMaxDist = false;
+        testo.usingAngle = false;
+        testo.usingGettingCloser = false;
+        testo.usingTrajectoryAngle = true;
+        testo.maxTrajectoryAngle = 0.5;
+        this.rules.push(testo);
+
     }
 
     this.resetGame = function(startX, startY, startAngle){
@@ -347,9 +357,17 @@ function Ship(parent, mutationCurve){
                     bInfo.angleFromMe = this.angle - atan2(this.pos.y-bulPos.y, this.pos.x-bulPos.x) + PI;
                     if (bInfo.angleFromMe > PI)  bInfo.angleFromMe -= TWO_PI;
                     if (bInfo.angleFromMe < -PI) bInfo.angleFromMe += TWO_PI;
+
                     //see where the bullet will be next frame
                     var nextBulPos = bulPos + bulVel;
                     bInfo.gettingCloser = distSquared(this.pos.x, this.pos.y, nextBulPos.x, nextBulPos.y) < bInfo.distSq;
+
+                    //or just get the angle from the bullet to the ship
+                    var angleToShip = atan2(bulPos.y-this.pos.y, bulPos.x-this.pos.x);
+                    bInfo.trajectoryOffset = PI - Math.abs(angleToShip-ships[i].bullets[b].angle);
+
+                    //console.log("angle "+angleToShip);
+                    //console.log("offset "+bInfo.trajectoryOffset);
                     
                     this.otherBulletInfo.push(bInfo);
                 }

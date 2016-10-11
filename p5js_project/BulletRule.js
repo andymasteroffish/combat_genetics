@@ -13,6 +13,9 @@ function BulletRule(parent, _mutationCurve){
     
     this.usingGettingCloser;
 
+    this.useTrajectoryAngle;
+    this.maxTrajectoryAngle;
+
 
     this.setupFreshCustom = function(){
 	    this.type = RuleType.RULE_BULLET;
@@ -20,13 +23,16 @@ function BulletRule(parent, _mutationCurve){
 	    this.usingMaxDist = random() > 0.5;
 	    this.usingMinDist = random() > 0.5;
 	    this.usingAngle = random() > 0.5;
-	    this.usingGettingCloser = random() > 0.5;
+	    this.usingGettingCloser = false;//andom() > 0.5;
+	    this.usingTrajectoryAngle = random() > 0.5;
 
 	    
 	    this.minDist = random(0, arenaW);
 	    this.maxDist = random(0, arenaH);
 	    this.minAngle = random(-PI, PI);
 	    this.maxAngle = random(-PI, PI);
+
+	    this.maxTrajectoryAngle = random(0, PI);
 	    
 	    this.keepRangesReasonable();
 	}
@@ -35,12 +41,14 @@ function BulletRule(parent, _mutationCurve){
 		this.usingMaxDist = parent.usingMaxDist;
 	    this.usingMinDist = parent.usingMinDist;
 	    this.usingAngle = parent.usingAngle;
-	    this.usingGettingCloser = parent.usingGettingCloser;
+	    this.usingGettingCloser = false;//parent.usingGettingCloser;
+	    this.usingTrajectoryAngle = parent.usingTrajectoryAngle;
 	    
 	    this.minDist = parent.minDist;
 	    this.maxDist = parent.maxDist;
 	    this.minAngle = parent.minAngle;
 	    this.maxAngle = parent.maxAngle;
+	    this.maxTrajectoryAngle = parent.maxTrajectoryAngle;
 	    
 	    this.mutate();
 	}
@@ -56,6 +64,7 @@ function BulletRule(parent, _mutationCurve){
 	        var maxDistPass = !this.usingMaxDist;
 	        var anglePass = !this.usingAngle;
 	        var closerPass = !this.usingGettingCloser;
+	        var trajectoryPass = !this.usingTrajectoryAngle;
 	        
 	        if (this.usingMinDist){
 	            minDistPass = info.distSq > this.minDist*this.minDist;
@@ -71,10 +80,15 @@ function BulletRule(parent, _mutationCurve){
 	        if (this.usingGettingCloser){
 	            closerPass = info.gettingCloser;
 	        }
+
+	        if (this.usingTrajectoryAngle){
+	        	//console.log("I need " +this.maxTrajectoryAngle+"   its "+info.trajectoryOffset);
+	        	trajectoryPass = info.trajectoryOffset < this.maxTrajectoryAngle;
+	        }
 	        
 	        //random(console.log("what we got "+minDistPass+" "+maxDistPass+" "+anglePass+" "+closerPass);
 	        
-	        if (minDistPass && maxDistPass && anglePass && closerPass){
+	        if (minDistPass && maxDistPass && anglePass && closerPass && trajectoryPass){
 	            //random(console.log("angle from me: "+info.angleFromMe/PI);
 	            return true;
 	        }
@@ -93,8 +107,9 @@ function BulletRule(parent, _mutationCurve){
 	    if (Math.pow(random(), this.mutationCurve) < baseSwitchChance)    this.usingMinDist = !this.usingMinDist;
 	    if (Math.pow(random(), this.mutationCurve) < baseSwitchChance)    this.usingMaxDist = !this.usingMaxDist;
 	    if (Math.pow(random(), this.mutationCurve) < baseSwitchChance)    this.usingAngle = !this.usingAngle;
-	    if (Math.pow(random(), this.mutationCurve) < baseSwitchChance)    this.usingGettingCloser = !this.usingGettingCloser;
-	    
+	    if (Math.pow(random(), this.mutationCurve) < baseSwitchChance)    this.usingGettingCloser = false;//!this.usingGettingCloser;
+	    if (Math.pow(random(), this.mutationCurve) < baseSwitchChance)    this.usingTrajectoryAngle = !this.usingTrajectoryAngle;
+
 	    var distRange = 50 * this.mutationCurve;
 	    this.minDist += random(-distRange, distRange);
 	    this.maxDist += random(-distRange, distRange);
@@ -102,6 +117,8 @@ function BulletRule(parent, _mutationCurve){
 	    var angleRange = PI/4 * this.mutationCurve;
 	    this.minAngle += random(-angleRange, angleRange);
 	    this.maxAngle += random(-angleRange, angleRange);
+
+	    this.maxTrajectoryAngle += random(-angleRange, angleRange);
 	    
 	    this.keepRangesReasonable();
 	    
@@ -124,6 +141,8 @@ function BulletRule(parent, _mutationCurve){
 	        this.minDist = this.maxDist;
 	        this.maxDist = temp;
 	    }
+
+	    this.maxTrajectoryAngle = this.clamp(this.maxTrajectoryAngle, 0, PI);
 	}
 
 	this.print = function(){
@@ -140,12 +159,15 @@ function BulletRule(parent, _mutationCurve){
 	    if (this.usingGettingCloser){
 	        console.log("bullet must be getting closer");
 	    }
+	    if (this.useTrajectoryAngle){
+	    	console.log("bullet must be on trajectory within "+this.maxTrajectoryAngle+" of hitting me");
+	    }
 	}
 
 	this.getHTML = function(orderNum){
 		var text = "";
 		var haveStatedIt = false;
-		text += "<p class='rule_name'>"+(orderNum+1)+". Command: "+this.getCommandName(this.command)+"</p>";
+		text += "<p class='rule_name'>"+(orderNum+1)+". Action: "+this.getCommandName(this.command)+"</p>";
 	    text += "<p class='rule_text'>Cool down: "+Math.floor(this.coolDownTicks)+"</p>";
 	    if (this.usingMinDist){
 	        text += "<p class='rule_text'>"+(haveStatedIt ? "That" : "A")+" bullet must be at least: "+Math.floor(this.minDist)+" px away</p>";
@@ -161,6 +183,10 @@ function BulletRule(parent, _mutationCurve){
 	    }
 	    if (this.usingGettingCloser){
 	    	text += "<p class='rule_text'>"+(haveStatedIt ? "That" : "A")+" bullet must be getting closer</p>";
+	    	haveStatedIt = true;
+	    }
+	    if (this.usingTrajectoryAngle){
+	    	text += "<p class='rule_text'>"+(haveStatedIt ? "That" : "A")+" bullet's trajectory must be within "+Math.floor(degrees(this.maxTrajectoryAngle)) +" degrees of hitting</p>";
 	    	haveStatedIt = true;
 	    }
 	    return text;
