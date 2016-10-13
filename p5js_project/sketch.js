@@ -1,3 +1,4 @@
+"use strict";
 
 var arenaW = 600;
 var arenaH = 600;
@@ -235,16 +236,25 @@ function startNextGeneration(){
 
     //update the info boxs
 	resetInfoBoxes();
+
+    // console.log("PRE SORT");
+    // for (var i=0; i<shipsWaiting.length; i++){
+    //     console.log(i+"  "+shipsWaiting[i].fullName());
+    // }
     
     //shuffle that shit
     for (var i=0; i<shipsWaiting.length * 50; i++){
-        var randA = random(shipsWaiting.length);
-        var randB = random(shipsWaiting.length);
+        var randA = Math.floor(random(shipsWaiting.length));
+        var randB = Math.floor(random(shipsWaiting.length));
         var temp = shipsWaiting[randA];
         shipsWaiting[randA] = shipsWaiting[randB];
         shipsWaiting[randB] = temp;
     }
-    
+
+    // console.log("POST SORT");
+    // for (var i=0; i<shipsWaiting.length; i++){
+    //     console.log(i+"  "+shipsWaiting[i].fullName());
+    // }
     
     //start the game
     startNextGame();

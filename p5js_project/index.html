@@ -29,7 +29,7 @@
 
   	#defaultCanvas0{ position: absolute; left:10px; top:110px;}
 
-    #controls{ padding-left: 15px; padding-top: 5px; overflow: auto; height:60px; }
+    #controls{ padding-left: 15px; padding-top: 5px; overflow: auto; height:60px; width: 900px; }
     .control{ float:left; width:150px;}
     .control p{ margin-top: 0px; }
     .slider{ margin-top: -10px; }
@@ -95,7 +95,7 @@
   </div>
 
   <div id = "ship_info">
-    <div style="padding-bottom: 15px;">Click a ship's box to expand its behavior rules</div>
+    <div style="padding-bottom: 15px;  width:400px;">Click a ship's box to expand its behavior rules</div>
   </div>
 
   <div id = "description">
@@ -104,7 +104,7 @@
     This simulation attempts to create effective spaceship shooter AI using a genetic algorithm. The game itself is roughly based on <a href="https://www.youtube.com/watch?v=3m86ftny1uY" target="_blank">Combat for the Atari 2600</a>. When it starts, all ships are created with a completely randomized set of rules that govern their behavior. Once all of the ships in a given generation get a chance to compete, the ones that got the most kills (with a bonus for not dying themselves) are allowed to continue to the next generation and to have children. The children inherit the same set of behaviors that the parents had, but mutate them slightly: a value gets changed here and there, maybe a rule gets removed or a new one gets added. Even though these changes are random, over many generations the natural selection process selects for mutations that make them more effective pilots.
     </p>
     <p>
-    I recomend maxing out the ticks-per frame and letting it run for a while, slowing it down when you want to check in. Check out how different your ships are 100 generations in and 1000 generations in!
+    I recommend maxing out the ticks-per frame and letting it run for a while, slowing it down when you want to check in. Check out how different your ships are 100 generations in and 1000 generations in!
     </p>
     <p>
     This project was inspired by <a href="http://rednuht.org/genetic_cars_2/" target="_blank">Genetic Cars 2</a> by <a href="http://rednuht.org/" target="_blank">Rafael Matsunaga</a> which is worth gazing at for hours.
@@ -113,7 +113,7 @@
 
     <h2>Behavior Rules</h2>
     <p>
-    At the core of the ship AI is a set of behavior rules. Each new ship gets between 8 and 20 rules and these rules specify some condition and an action to take if that condition is met. With every tick of the game, each ship goes through its list of rules starting with the first one and checking if the board state meets the requirement. When it finds one who’s condition is satisfied, the ships takes that action and is done for that tick. Rules can have a cool down time so that they can’t go off twice in a row allowing rules under them to have a chance even if their condition is still met.
+    At the core of the ship AI is a set of behavior rules. Each new ship gets between 8 and 20 rules and these rules specify some condition and an action to take if that condition is met. With every tick of the game, each ship goes through its list of rules starting with the first one and checking if the board state meets the requirement. When it finds one who’s condition is satisfied, the ship takes that action and is done for that tick. Rules can have a cool down time so that they can’t go off twice in a row allowing rules under them to have a chance even if their condition is still met.
     </p>
     <p>
     The FIRE action is special in that ships cannot fire every tick. All rules with the FIRE action are ignored unless enough ticks have passed since the last time the ship shot. Currently a ship can only fire every 150 ticks.
@@ -131,7 +131,7 @@
     Besides being allowed to continue, those ships that survived are allowed to reproduce. All ships that survived get one child, and the top 1/8 from the previous generation get two additional children (three total). The remaining slots are filled with brand new ships with completely randomized behaviors.
     </p>
     <p>
-    The scoring only takes into consideration the most recent round. Results from games played in previous generations are listed in the ships stats on the right but do not factor into wether or not it will be allowed to survive and reproduce. Even if a ship came out on top 5 generations in a row, if it has a game where it gets no kills, it’s out (although presumably its offspring will be numerous at that point).
+    The scoring only takes into consideration the most recent round. Results from games played in previous generations are listed in the ship's stats on the right but do not factor into whether or not it will be allowed to survive and reproduce. Even if a ship came out on top 5 generations in a row, if it has a game where it gets no kills, it’s out (although presumably its offspring will be numerous at that point).
     </p>
 
     <h2>Names</h2>
@@ -163,7 +163,7 @@
     </p>
 
     <br>
-    <p>Javascript and editting help from <a href="http://janefriedhoff.com/" target="_blank">Jane Friedhoff</a>.</p>
+    <p>Javascript and editing help from <a href="http://janefriedhoff.com/" target="_blank">Jane Friedhoff</a>.</p>
 
   </div>
 
