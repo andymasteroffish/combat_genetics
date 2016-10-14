@@ -147,7 +147,7 @@ function endGame(){
         
         //age them
         game.ships[i].currentlyPlaying = false;
-        game.ships[i].infoBox.setFromShip( game.ships[i] );       //PUT THIS BACK
+        game.ships[i].infoBox.setFromShip( game.ships[i] );  
         //add them to the done list
         shipsDone.push(game.ships[i]);
     }
@@ -349,8 +349,6 @@ function keyReleased(){
 }
 
 function resetInfoBoxes(){
-
-    //return; //KILL ME
 
     while( infoBoxes.length < numShips){
         infoBoxes.push( new InfoBox(infoBoxes.length) );

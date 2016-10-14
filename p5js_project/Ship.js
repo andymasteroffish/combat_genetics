@@ -178,7 +178,7 @@ function Ship(parent, mutationCurve){
         
         this.bullets.splice(0,this.bullets.length);
 
-        this.infoBox.setFromShip(this); //PUT THIS BACK
+        this.infoBox.setFromShip(this); 
     }
 
     this.update = function(){

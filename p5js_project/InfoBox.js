@@ -9,11 +9,6 @@ function InfoBox(_rank){
 
 	this.shipInfoShortDiv = document.createElement('div');
 	this.div.appendChild(this.shipInfoShortDiv);
-	
-	// this.div = createDiv('');
- //    this.div.addClass('info_box');
- //    this.div.id("info_box_"+this.rank);
- //    this.div.parent("ship_info");
 
     this.expandedInfo = null;
     this.expandedInfoOpen = false;
@@ -21,24 +16,19 @@ function InfoBox(_rank){
     this.ship = null;
 
     this.setFromShip = function(_ship){
-    	//return 	//KILL ME
 
     	this.ship = _ship;
     	this.div.className = 'info_box';
-    	//this.div.removeClass('info_box_dead');
-    	//this.div.removeClass('info_box_fighting');
     	
     	var extraText = "";
     	if (this.ship.currentlyPlaying){
     		if (this.ship.isDead){
     			extraText = " - dead";
     			this.div.className = 'info_box info_box_dead';
-    			//this.div.addClass('info_box_dead');
 
     		}else{
     			extraText = " - fighting";
     			this.div.className = 'info_box info_box_fighting';
-    			//this.div.addClass('info_box_fighting');	PUT ALL THIS CLASS SHIT BACK
     		}
     	}
 
@@ -51,13 +41,10 @@ function InfoBox(_rank){
 	}
 
 	this.toggleOpen = function(){
-		//return 	//KILL ME
 
 		//if it was open, close it
 		if (this.expandedInfoOpen){
 			this.div.removeChild(this.expandedInfo);
-			//this.expandedInfo.remove();
-			//this.expandedInfo = null;
 			this.expandedInfoOpen = false;
 			return;
 		}
@@ -66,14 +53,6 @@ function InfoBox(_rank){
 		if (this.ship == null){
 			return;
 		}
-
-		//testing
-		console.log(this.ship.getData());
-
-		//otherwise we create a new element with all of the rules listed
-		//this.expandedInfo = createDiv('');
-		//this.expandedInfo.addClass('expanded_info');
-		//this.div.child(this.expandedInfo);
 
 		this.expandedInfo = document.createElement('div');
 		this.expandedInfo.className = 'expanded_info';
@@ -92,7 +71,7 @@ function InfoBox(_rank){
 
     var idNum = this.rank;
     document.getElementById("info_box_"+idNum).onmousedown = function () {
-	    console.log("User moused down "+idNum);
+	    //console.log("User moused down "+idNum);
 	    infoBoxes[idNum].toggleOpen();
 	    return true; // Not needed, as long as you don't return false
 	};
