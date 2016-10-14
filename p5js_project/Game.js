@@ -48,7 +48,7 @@ function Game(startingShips){
             if (!this.ships[i].isDead){
                 if (this.checkShipAgainstBullets(this.ships[i])){
                     this.ships[i].isDead = true;
-                    this.ships[i].infoBox.setFromShip(this.ships[i]);
+                    this.ships[i].infoBox.setFromShip(this.ships[i]);   //PUT THIS BACK
                     this.ships[i].totalDeaths++;
                     this.ships[i].bullets.splice(0, this.ships[i].bullets.length);
                 }

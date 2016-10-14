@@ -130,7 +130,7 @@ function ShipRule(parent, _mutationCurve){
 		var haveStatedIt = false;
 		var text = "";
 		text += "<p class='rule_name'>"+(orderNum+1)+". Action: "+this.getCommandName(this.command)+"</p>";
-	    text += "<p class='rule_text'>Cool down: "+Math.floor(this.coolDownTicks)+"</p>";
+	    text += "<p class='rule_text'>Cool down: "+Math.floor( Math.max(0,this.coolDownTicks))+"</p>";
 	    if (this.usingMinDist){
 	        text += "<p class='rule_text'>"+(haveStatedIt ? "That" : "Another")+" ship must be at least: "+Math.floor(this.minDist)+" px away</p>";
 	    	haveStatedIt = true;
@@ -144,6 +144,35 @@ function ShipRule(parent, _mutationCurve){
 	    	haveStatedIt = true;
 	    }
 	    return text;
+	}
+
+	this.getDataCustom = function(){
+		var text = "";
+		text += this.usingMinDist.toString()+",";
+		text +=	this.minDist.toString()+",";
+			    
+		text +=	this.usingMaxDist.toString()+",";
+		text +=	this.maxDist.toString()+",";
+			    
+		text +=	this.usingAngle.toString()+",";
+		text +=	this.minAngle.toString()+",";
+		text += this.maxAngle.toString();
+		return text;
+	}
+
+	this.setFromTextCustom = function(text){
+		var c = 3;
+		this.usingMinDist = text[c++] == "true";
+		this.minDist = parseFloat(text[c++]);
+
+		this.usingMaxDist  = text[c++] == "true";;
+		this.maxDist = parseFloat(text[c++]);
+
+		this.usingAngle  = text[c++] == "true";;
+		this.minAngle = parseFloat(text[c++]);
+		this.maxAngle = parseFloat(text[c++]);
+
+		console.log("using min dist: "+this.usingMinDist+"  min dist: "+this.minDist);
 	}
 
 

@@ -97,11 +97,8 @@ function Ship(parent, mutationCurve){
         if ( Math.pow(random(), mutationCurve) < 0.3 && this.rules.length > 0){
             var randID = random(this.rules.length);
             this.rules.splice(randID, 1);
-            //delete this.rules[randID];
-            //this.rules.erase(rules.begin()+randID);
         }
         
-        //PUT THIS BACK
         //chance of adding a rule
         if (Math.pow(random(), mutationCurve) < 0.3){
             //console.log("ADD A NEW RULE");
@@ -181,7 +178,7 @@ function Ship(parent, mutationCurve){
         
         this.bullets.splice(0,this.bullets.length);
 
-        this.infoBox.setFromShip(this);
+        this.infoBox.setFromShip(this); //PUT THIS BACK
     }
 
     this.update = function(){
@@ -407,6 +404,46 @@ function Ship(parent, mutationCurve){
                 word += random(cons);
             }
         }
+    }
+
+    this.getData = function(){
+        var text = "";
+        text += this.name[0]+","+this.name[1]+","+this.name[2]+"#";
+        for (var i=0; i<this.rules.length; i++){
+            text += this.rules[i].getData() + "#";
+        }
+        return text;
+    }
+
+    this.setFromText = function(text){
+        this.rules.splice(0, this.rules.length);    //clear existing rules
+
+        var lines = text.split("#");
+        //first line is the name
+        var newNames = lines[0].split(",");
+        console.log("new name: "+newNames);
+
+        for (var i=0; i<3; i++){
+            this.name[i] = newNames[i];
+        }
+
+        //the remaining lines describe rules
+        for (var i=1; i<lines.length; i++){
+            var line = lines[i].split(",");
+            if (line.length > 5){
+                console.log("parsing "+line);
+                var thisRule;
+                if (line[0] == "S"){
+                    thisRule = new ShipRule(null, mutationCurve);
+                }else{
+                    thisRule = new BulletRule(null, mutationCurve);
+                }
+                thisRule.setFromText(line);
+                this.rules.push(thisRule);
+            }
+        }
+
+
     }
 
     this.kill = function(){

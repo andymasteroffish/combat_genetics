@@ -8,12 +8,12 @@ function BulletRule(parent, _mutationCurve){
     this.maxDist;
     
     this.usingAngle;
-    this.minAngle
+    this.minAngle;
     this.maxAngle;
     
     this.usingGettingCloser;
 
-    this.useTrajectoryAngle;
+    this.usingTrajectoryAngle;
     this.maxTrajectoryAngle;
 
 
@@ -159,7 +159,7 @@ function BulletRule(parent, _mutationCurve){
 	    if (this.usingGettingCloser){
 	        console.log("bullet must be getting closer");
 	    }
-	    if (this.useTrajectoryAngle){
+	    if (this.usingTrajectoryAngle){
 	    	console.log("bullet must be on trajectory within "+this.maxTrajectoryAngle+" of hitting me");
 	    }
 	}
@@ -168,7 +168,7 @@ function BulletRule(parent, _mutationCurve){
 		var text = "";
 		var haveStatedIt = false;
 		text += "<p class='rule_name'>"+(orderNum+1)+". Action: "+this.getCommandName(this.command)+"</p>";
-	    text += "<p class='rule_text'>Cool down: "+Math.floor(this.coolDownTicks)+"</p>";
+	    text += "<p class='rule_text'>Cool down: "+Math.floor(Math.max(0,this.coolDownTicks))+"</p>";
 	    if (this.usingMinDist){
 	        text += "<p class='rule_text'>"+(haveStatedIt ? "That" : "A")+" bullet must be at least: "+Math.floor(this.minDist)+" px away</p>";
 	    	haveStatedIt = true;
@@ -186,10 +186,51 @@ function BulletRule(parent, _mutationCurve){
 	    	haveStatedIt = true;
 	    }
 	    if (this.usingTrajectoryAngle){
-	    	text += "<p class='rule_text'>"+(haveStatedIt ? "That" : "A")+" bullet's trajectory must be within "+Math.floor(degrees(this.maxTrajectoryAngle)) +" degrees of hitting</p>";
+	    	text += "<p class='rule_text'>"+(haveStatedIt ? "That" : "A")+" bullet's trajectory must be within "+Math.floor(degrees(this.maxTrajectoryAngle)) +" degrees of hitting me</p>";
 	    	haveStatedIt = true;
 	    }
 	    return text;
+	}
+
+	this.getDataCustom = function(){
+		var text = "";
+
+		text+= this.usingMinDist.toString()+",";
+	    text+= this.minDist.toString()+",";
+	    
+	    text+= this.usingMaxDist.toString()+",";
+	    text+= this.maxDist.toString()+",";
+	    
+	    text+= this.usingAngle.toString()+",";
+	    text+= this.minAngle.toString()+",";
+	    text+= this.maxAngle.toString()+",";
+	    
+	    text+= this.usingGettingCloser.toString()+",";
+
+	    text+= this.usingTrajectoryAngle.toString()+",";
+	    text+= this.maxTrajectoryAngle.toString();
+
+		return text;
+	}
+
+	this.setFromTextCustom = function(text){
+		var c = 3;
+
+		this.usingMinDist = text[c++] == "true";
+	    this.minDist = parseFloat(text[c++]);
+	    
+	    this.usingMaxDist = text[c++] == "true";
+	    this.maxDist = parseFloat(text[c++]);
+	    
+	    this.usingAngle = text[c++] == "true";
+	    this.minAngle = parseFloat(text[c++]);
+	    this.maxAngle = parseFloat(text[c++]);
+	    
+	    this.usingGettingCloser = text[c++] == "true";
+
+	    this.usingTrajectoryAngle = text[c++] == "true";
+	    this.maxTrajectoryAngle = parseFloat(text[c++]);
+
 	}
 
 

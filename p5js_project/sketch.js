@@ -147,7 +147,7 @@ function endGame(){
         
         //age them
         game.ships[i].currentlyPlaying = false;
-        game.ships[i].infoBox.setFromShip( game.ships[i] );
+        game.ships[i].infoBox.setFromShip( game.ships[i] );       //PUT THIS BACK
         //add them to the done list
         shipsDone.push(game.ships[i]);
     }
@@ -335,12 +335,22 @@ function keyPressed(){
     if (keyCode == 80){	//p
         paused = !paused;
     }
+
+    // if (keyCode == 83){  //s
+    //     saveShips();
+    // }
+    // if (keyCode == 76){  //l
+    //     loadShips();
+    // }
+    //console.log(keyCode);
 }
 function keyReleased(){
 	game.keyReleased(keyCode);
 }
 
 function resetInfoBoxes(){
+
+    //return; //KILL ME
 
     while( infoBoxes.length < numShips){
         infoBoxes.push( new InfoBox(infoBoxes.length) );
@@ -350,11 +360,37 @@ function resetInfoBoxes(){
     }
 
     for (var i=0; i<shipsSorted.length; i++){
+        //make sure the boxes are closes
+        if (infoBoxes[i].expandedInfoOpen){
+            infoBoxes[i].toggleOpen();
+        }
+        //give them their new info
         infoBoxes[i].setFromShip(shipsSorted[i]);
         shipsSorted[i].infoBox = infoBoxes[i];
 	}
 }
 
+function saveShips(){
+    //STILL TESTING
+    var text = "";
+    for (var i=0; i<shipsSorted.length; i++){
+        text += shipsSorted[i].getData();
+        text += "";
+    }
+    console.log(text);
+}
+
+function loadShips(){
+    //STILL TESTING
+
+    // println("")
+    // //testing for now
+    // var text = "Jfpawu,Gpug,Tsce#B,5,0,true,358.9357954433136,false,412.4050046053428,false,-2.4379840834744244,-1.414256398293397,false,false,1.6072245077536789#S,4,3.811344367201386,false,145.91597515461694,true,278.0113613156034,false,-2.7528401874872404,0.5549307309153901#B,5,11.780152130153638,true,67.12338008960575,true,151.62312129975035,false,-1.1323416179563437,2.5289266400672954,false,true,2.2032282693606233#S,2,5.744919486506408,false,46.08024026081989,true,478.1237773802423,false,-1.3989665211637023,0.922165451094993#B,2,0,true,404.64095052022327,false,416.4082845226567,true,1.2058911203536242,2.084708593269329,false,true,2.49401844896173#B,5,7.465900664129723,true,86.33036593185177,false,105.85050510658576,true,-2.774629574667042,-2.660541301867401,false,false,2.4962821296751216#S,2,0,true,255.52084258095297,true,545.3604907585354,false,-0.5662778632536525,1.3421577201909258#S,5,0,false,343.3091570753592,false,431.7205981016895,true,-1.1246655736364564,2.3646297769638593#B,5,5.932339052537063,false,550.4288848787495,false,553.1672743084939,false,-1.8721413949788939,-0.664128935036834,false,false,2.173516511699735#";
+    // var thisShip = new Ship(null, mutationCurve);
+    // thisShip.setFromText(text);
+    // thisShip.score = 100;
+    // shipsDone.push(thisShip);
+}
 
 function shipSort( a, b ) {
     return b.score - a.score;

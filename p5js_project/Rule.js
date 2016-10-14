@@ -55,7 +55,7 @@ function Rule(parent, _mutationCurve){
 	    
 	    //chance of changing cool down
 	    this.coolDownTicks += random(-3,3);
-	    this.coolDownTicks = this.clamp(this.coolDownTicks, -15, 20);
+	    this.coolDownTicks = this.clamp(this.coolDownTicks, -10, 20);
 	    
 	    //chance of changing funciton
 	    if (pow(random(), this.mutationCurve) < 0.1){
@@ -89,6 +89,29 @@ function Rule(parent, _mutationCurve){
 	    
 	    return "wait wut that bad";
 	}
+
+	this.getData = function(){
+		var text = "";
+		if ( this.type == RuleType.RULE_SHIP ){
+			text += "S,";
+		}else{
+			text += "B,";
+		}
+
+		text += this.command.toString()+",";
+		text += this.coolDownTicks.toString()+",";
+
+		text += this.getDataCustom();
+		return text;
+	}
+	this.getDataCustom = function(){return "";}
+
+	this.setFromText = function(text){
+		this.command = parseInt(text[1]);
+		this.coolDownTicks = parseInt(text[2]);
+		this.setFromTextCustom(text);
+	}
+	this.setFromTextCustom = function(text){}
 
 	this.clamp = function(val, min, max){
 		return Math.max(min, Math.min(val, max));
